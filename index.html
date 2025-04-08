@@ -111,7 +111,7 @@
 <p><a target="_blank" rel="noopener" href="https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html">https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html</a></p>
 <h2 id="二-数据读取与预处理"><a href="#二-数据读取与预处理" class="headerlink" title="二. 数据读取与预处理"></a>二. 数据读取与预处理</h2><h3 id="1-导入相应的Python库"><a href="#1-导入相应的Python库" class="headerlink" title="1. 导入相应的Python库"></a>1. 导入相应的Python库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PySpark相关库</span></span><br><span class="line"><span class="keyword">from</span> pyspark <span class="keyword">import</span> SparkConf</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> col, when</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> StructType, StructField, DoubleType, StringType, IntegerType</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据处理与可视化库</span></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生存分析库</span></span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter</span><br><span class="line"><span class="keyword">from</span> lifelines.utils <span class="keyword">import</span> median_survival_times</span><br><span class="line"><span class="keyword">from</span> lifelines.statistics <span class="keyword">import</span> pairwise_logrank_test, proportional_hazard_test</span><br><span class="line"><span class="keyword">from</span> lifelines.fitters.coxph_fitter <span class="keyword">import</span> CoxPHFitter</span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter, WeibullAFTFitter,LogNormalAFTFitter,LogLogisticAFTFitter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交互式可视化库</span></span><br><span class="line"><span class="keyword">from</span> ipywidgets <span class="keyword">import</span> interact, widgets</span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> display</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-数据导入"><a href="#2-数据导入" class="headerlink" title="2. 数据导入"></a>2. 数据导入</h2><p><strong>数据来源：</strong><a target="_blank" rel="noopener" href="https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv">https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv</a></p>
+<h3 id="2-数据导入"><a href="#2-数据导入" class="headerlink" title="2. 数据导入"></a>2. 数据导入</h3><p><strong>数据来源：</strong><a target="_blank" rel="noopener" href="https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv">https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv</a></p>
 <p><strong>数据说明：</strong></p>
 <ol>
 <li><strong>客户信息</strong></li>
@@ -270,9 +270,11 @@
 
 <h3 id="3-数据预处理"><a href="#3-数据预处理" class="headerlink" title="3. 数据预处理"></a>3. 数据预处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原始文件存在bronze_df表中</span></span><br><span class="line">bronze_df = spark.read.<span class="built_in">format</span>(<span class="string">&#x27;csv&#x27;</span>).schema(schema).option(<span class="string">&#x27;header&#x27;</span>,<span class="string">&#x27;true&#x27;</span>).load(data_path)</span><br><span class="line">bronze_df.show(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行数据预处理,将处理好的数据放在silver_df中</span></span><br><span class="line"><span class="comment"># 将“churn”列转换为布尔值，并过滤出有月度合同的互联网用户。</span></span><br><span class="line">silver_df = bronze_df.withColumn(<span class="string">&#x27;churn&#x27;</span>,when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>).when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>).otherwise(<span class="string">&#x27;Unknown&#x27;</span>))\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;contract&#x27;</span>) == <span class="string">&#x27;Month-to-month&#x27;</span>)\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;internetService&#x27;</span>) != <span class="string">&#x27;No&#x27;</span>)</span><br><span class="line">silver_df.show(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 
-<h2 id="三-卡普兰-迈耶生存曲线（Kaplan-Meier"><a href="#三-卡普兰-迈耶生存曲线（Kaplan-Meier" class="headerlink" title="三. *卡普兰-迈耶生存曲线（Kaplan-Meier)"></a>三. *卡普兰-迈耶生存曲线（Kaplan-Meier)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将Spark dataframe 转成 Pandas dataframe 便于对接第三方库lifelines</span></span><br><span class="line">telco_pd = silver_df.toPandas()</span><br><span class="line">telco_pd.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型, 参数为Tenure和Churn</span></span><br><span class="line"><span class="comment"># 可视化生存概率曲线</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>]</span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line">kmf.plot(title=<span class="string">&#x27;Kaplan-Meier Survival Curve: Population level&#x27;</span>);</span><br></pre></td></tr></table></figure>
 
-<img src="C:\Users\19394\Desktop\1.png" alt="0.5" style="zoom: 33%;" />
+
+<h2 id="三-卡普兰-迈耶生存曲线（Kaplan-Meier"><a href="#三-卡普兰-迈耶生存曲线（Kaplan-Meier" class="headerlink" title="三. 卡普兰-迈耶生存曲线（Kaplan-Meier)"></a>三. 卡普兰-迈耶生存曲线（Kaplan-Meier)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将Spark dataframe 转成 Pandas dataframe 便于对接第三方库lifelines</span></span><br><span class="line">telco_pd = silver_df.toPandas()</span><br><span class="line">telco_pd.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型, 参数为Tenure和Churn</span></span><br><span class="line"><span class="comment"># 可视化生存概率曲线</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>]</span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line">kmf.plot(title=<span class="string">&#x27;Kaplan-Meier Survival Curve: Population level&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<img src="images\1.png" alt="0.5" style="zoom: 33%;" />
 
 <h3 id="1-Kaplan-Meier曲线与协变量分组的理想情况"><a href="#1-Kaplan-Meier曲线与协变量分组的理想情况" class="headerlink" title="1. Kaplan-Meier曲线与协变量分组的理想情况"></a>1. Kaplan-Meier曲线与协变量分组的理想情况</h3><p><strong>理想情况：</strong>不同组别的Kaplan-Meier曲线应表现出明显分离（如OnlineSecurity的”Yes”和”No”组），这表明该协变量对预测目标（如客户流失）有区分能力。</p>
 <p><strong>不理想情况：</strong>若曲线紧密重叠（如Gender的“Female”和“Male”组），则说明该变量可能对预测无帮助。</p>
@@ -289,7 +291,11 @@
 <hr>
 <h3 id="4-模型不适用的情况"><a href="#4-模型不适用的情况" class="headerlink" title="4. 模型不适用的情况"></a>4. 模型不适用的情况</h3><p>Log-rank 检验假设各组风险比例恒定，若曲线交叉，需使用分段Log-Rank检验或Cox模型。</p>
 <hr>
-<p>以下是按性别和是否开启网络安全服务变量画出的Kaplan-Meier曲线和Log-Rank检验</p>
+<h3 id="5-模型结果与分析"><a href="#5-模型结果与分析" class="headerlink" title="5. 模型结果与分析"></a>5. 模型结果与分析</h3><p>以下是按性别和是否开启网络安全服务变量画出的Kaplan-Meier曲线和Log-Rank检验</p>
+<ul>
+<li><strong>OnlineSecurity</strong>就是一个很好的例子, 他的生存曲线能明显分离，进一步Log-Rank检验的p值非常小，我们能判断组间差异明显。</li>
+<li>相反，<strong>Gender</strong>的生存曲线非常接近，那就不太理想。当生存曲线非常接近时，我们需要进一步进行 Log-Rank 检验。以判断组之间在统计上是否等价。结果我们对于性别的 Log-Rank 检验的 p 值大于 0.05，因此我们无法拒绝两个组在统计上等价的原假设。</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -306,7 +312,7 @@
 <td align="right">2.289995</td>
 </tr>
 </tbody></table>
-<img src="C:\Users\19394\Desktop\2.png" style="zoom:33%;" />
+<img src="images\2.png" style="zoom:33%;" />
 
 <table>
 <thead>
@@ -324,10 +330,168 @@
 <td align="right">58.144453</td>
 </tr>
 </tbody></table>
-<img src="C:\Users\19394\Desktop\3.png" style="zoom:33%;" />
+<img src="images\3.png" style="zoom:33%;" />
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
+<p><strong>以下表格记录了Kaplan-Meier法的结果</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>Kaplan-Meier曲线</th>
+<th>Log-rank检验p值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gender</td>
+<td>基本重合</td>
+<td>p &#x3D; 0.20</td>
+</tr>
+<tr>
+<td>seniorCitizen</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>partner</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>dependents</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>phoneService</td>
+<td>略微分离</td>
+<td>p &#x3D; 0.38</td>
+</tr>
+<tr>
+<td>multipleLines</td>
+<td>明显分离</td>
+<td>所有p值均小于0.05</td>
+</tr>
+<tr>
+<td>internetService</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>onlineSecurity</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>onlineBackup</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>deviceProtection</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>techSupport</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>streamingTV</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>streamingMovies</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>paperlessBilling</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>paymentMethod</td>
+<td>除Bank transfer和Credit card曲线基本重合<br>其他曲线明显分离</td>
+<td>除Bank transfer和Credit Card的p &#x3D; 0.70<br>其余p &lt; 0.05</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>**其中性别对流失无影响，无需针对性营销 **。</p>
+</li>
+<li><p><strong>使用银行转账或信用卡支付的客户，其流失风险在统计学上无法区分。</strong></p>
+</li>
+</ul>
+<h2 id="四-Cox比例风险模型-Cox-Proportional-Hazards"><a href="#四-Cox比例风险模型-Cox-Proportional-Hazards" class="headerlink" title="四. Cox比例风险模型(Cox Proportional Hazards)"></a>四. Cox比例风险模型(Cox Proportional Hazards)</h2><h3 id="1-Cox比例风险模型-vs-Kaplan-Meier方法"><a href="#1-Cox比例风险模型-vs-Kaplan-Meier方法" class="headerlink" title="1. Cox比例风险模型 vs Kaplan-Meier方法"></a>1. Cox比例风险模型 vs Kaplan-Meier方法</h3><table>
+<thead>
+<tr>
+<th><strong>维度</strong></th>
+<th><strong>Kaplan-Meier</strong></th>
+<th><strong>Cox比例风险模型</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>功能</strong></td>
+<td>估计生存概率 $S(t)$</td>
+<td>估计风险比</td>
+</tr>
+<tr>
+<td><strong>输入</strong></td>
+<td>单变量分组</td>
+<td>多变量联合分析</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td>生存曲线</td>
+<td>风险比 $\exp(\beta)$ + p值</td>
+</tr>
+</tbody></table>
+<p>风险（Hazard） 是生存的“反面”。</p>
+<hr>
+<h3 id="2-Cox模型核心公式"><a href="#2-Cox模型核心公式" class="headerlink" title="2. Cox模型核心公式"></a>2. Cox模型核心公式</h3><p>$$<br>h(t \mid X) &#x3D; \underbrace{h_0(t)}<em>{\text{基线风险}} \cdot \underbrace{\exp(\beta_1 X_1 + \dots + \beta_p X_p)}</em>{\text{部分风险}}<br>$$<br>其中，基线风险 $h_0(t)$ 所有协变量取基准值时的风险函数；部分风险 $\exp(\beta X)$表示协变量偏离基线值时对风险的影响。</p>
+<hr>
+<h2 id="比例风险假设"><a href="#比例风险假设" class="headerlink" title="比例风险假设"></a>比例风险假设</h2><p>不同组别之间的风险比随时间保持恒定。</p>
+<p>因为基线风险仅与时间$t$相关，描述所有协变量取基准值时风险随时间的变化模式。</p>
+<p>部分风险仅与协变量$X$相关，表示协变量对风险的乘性影响，且不随时间变化。</p>
+<hr>
+<h2 id="如何验证假设"><a href="#如何验证假设" class="headerlink" title="如何验证假设"></a>如何验证假设</h2><ul>
+<li>方法 1: 统计学检验: cph.check_assumptions(df,p_value_threshold&#x3D;0.05)，p值小于0.05代表违反了假设。</li>
+<li>方法 2: Schoenfield残差：cph.check_assumptions(…, show_plots&#x3D;True)，通过残差与时间的关系图，直观判断变量风险比是否随时间变化, 残差与时间有任何趋势代表违反假设。</li>
+<li>方法 3: Log-log Kaplan-Meier曲线：绘制不同组的 $ \log(-\log(S(t))) $ 曲线，若曲线平行则假设成立。</li>
+</ul>
+<hr>
+<h2 id="假设违反的解决方案"><a href="#假设违反的解决方案" class="headerlink" title="假设违反的解决方案"></a>假设违反的解决方案</h2><p><strong>（1）保持原模型</strong></p>
+<ul>
+<li>适用于预测场景而非因果推断。  </li>
+<li>在这种情况下关注模型在测试集上表现良好（如Concordance指数高）。</li>
+</ul>
+<p><strong>（2）使用分层模型（Stratified Cox Model）</strong></p>
+<ul>
+<li><strong>原理</strong>：对违反假设的变量分层，每组独立估计基线风险 $ h_0(t) $，共享其他变量系数。  </li>
+<li><strong>Python示例</strong>: cph.fit(df, strata&#x3D;[‘onlineBackup_Yes’], duration_col&#x3D;’tenure’, event_col&#x3D;’churn’)</li>
+</ul>
+<p><strong>（3）引入时变协变量（Extended Cox Model）</strong></p>
+<ul>
+<li><strong>原理</strong>：通过交互项捕捉风险比随时间的变化</li>
+<li><strong>Python示例</strong>：df[‘backup_time’] &#x3D; df[‘onlineBackup_Yes’] * df[‘tenure’]  # 创建时间交互项</li>
+<li><strong>适用场景</strong>：已知风险比随时间线性变化。</li>
+</ul>
+<p><strong>（4）使用样条函数或分段常数风险</strong></p>
+<ul>
+<li><strong>原理</strong>：将时间轴分段，每段内基线风险为常数或平滑曲线。  </li>
+<li><strong>优势</strong>：可以灵活拟合复杂的时间模式。  </li>
+<li><strong>Python示例</strong>：  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> PiecewiseExponentialFitter</span><br><span class="line">pwf = PiecewiseExponentialFitter(breakpoints=[<span class="number">0</span>, <span class="number">6</span>, <span class="number">12</span>]).fit(df, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>（5）改用别的模型（如加速失效时间模型AFT）</strong></p>
+<ul>
+<li><strong>AFT模型</strong>：假设生存时间 ( T ) 服从特定分布（如Weibull、对数正态），直接建模生存时间而非风险函数。  </li>
+<li><strong>适用场景</strong>：  <ul>
+<li>PH假设严重违反且无法修正。  </li>
+<li>生存时间有明显参数分布特征。</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
