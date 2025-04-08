@@ -14,7 +14,7 @@
 <meta property="og:description" content="我是唐麟杰, 学号是12111204, 这是我第一篇博客。 [toc] 生存分析实战1. 概述生存分析是一种统计方法，主要用于研究某个事件（如死亡、故障、客户流失）发生前的时间长度及其影响因素。它的核心特点是能处理“删失数据”（censored data），即部分研究对象在观察期内未发生目标事件（如患者未死亡、设备未故障）。 该博客是一篇学习笔记，以下是全文框架。  卡普兰-迈耶估计量（Kapla">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-04-08T03:32:32.000Z">
-<meta property="article:modified_time" content="2025-04-08T04:27:44.426Z">
+<meta property="article:modified_time" content="2025-04-08T04:37:28.567Z">
 <meta property="article:author" content="Linjie Tang">
 <meta property="article:tag" content="a project">
 <meta name="twitter:card" content="summary">
@@ -112,6 +112,167 @@
 </ul>
 <p>以下资源在创建此博客时被参考。</p>
 <p><a target="_blank" rel="noopener" href="https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html">https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html</a></p>
+<h2 id="2-数据读取与预处理"><a href="#2-数据读取与预处理" class="headerlink" title="2. 数据读取与预处理"></a>2. 数据读取与预处理</h2><h3 id="1-导入相应的Python库"><a href="#1-导入相应的Python库" class="headerlink" title="1. 导入相应的Python库"></a>1. 导入相应的Python库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PySpark相关库</span></span><br><span class="line"><span class="keyword">from</span> pyspark <span class="keyword">import</span> SparkConf</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> col, when</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> StructType, StructField, DoubleType, StringType, IntegerType</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据处理与可视化库</span></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生存分析库</span></span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter</span><br><span class="line"><span class="keyword">from</span> lifelines.utils <span class="keyword">import</span> median_survival_times</span><br><span class="line"><span class="keyword">from</span> lifelines.statistics <span class="keyword">import</span> pairwise_logrank_test, proportional_hazard_test</span><br><span class="line"><span class="keyword">from</span> lifelines.fitters.coxph_fitter <span class="keyword">import</span> CoxPHFitter</span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter, WeibullAFTFitter,LogNormalAFTFitter,LogLogisticAFTFitter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交互式可视化库</span></span><br><span class="line"><span class="keyword">from</span> ipywidgets <span class="keyword">import</span> interact, widgets</span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> display</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-数据导入"><a href="#2-数据导入" class="headerlink" title="2. 数据导入"></a>2. 数据导入</h2><p><strong>数据来源：</strong><a target="_blank" rel="noopener" href="https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv">https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv</a></p>
+<p><strong>数据说明：</strong></p>
+<ol>
+<li><strong>客户信息</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customerID</td>
+<td>String</td>
+<td>客户唯一标识符</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>String</td>
+<td>性别（Male&#x2F;Female）</td>
+</tr>
+<tr>
+<td>seniorCitizen</td>
+<td>Double</td>
+<td>是否为老年人（0&#x3D;否, 1&#x3D;是）</td>
+</tr>
+<tr>
+<td>partner</td>
+<td>String</td>
+<td>是否有配偶（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>dependents</td>
+<td>String</td>
+<td>是否有经济依赖人（Yes&#x2F;No）</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><strong>服务使用情况</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tenure</td>
+<td>Double</td>
+<td>客户使用服务的月数（客户生命周期）</td>
+</tr>
+<tr>
+<td>phoneService</td>
+<td>String</td>
+<td>是否开通电话服务（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>multipleLines</td>
+<td>String</td>
+<td>是否开通多线电话（Yes&#x2F;No&#x2F;No phone service）</td>
+</tr>
+<tr>
+<td>internetService</td>
+<td>String</td>
+<td>互联网服务类型（DSL, Fiber optic, No）</td>
+</tr>
+<tr>
+<td>onlineSecurity</td>
+<td>String</td>
+<td>是否开通在线安全服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>onlineBackup</td>
+<td>String</td>
+<td>是否开通在线备份服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>deviceProtection</td>
+<td>String</td>
+<td>是否开通设备保护服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>techSupport</td>
+<td>String</td>
+<td>是否开通技术支持服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>streamingTV</td>
+<td>String</td>
+<td>是否开通流媒体电视（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>streamingMovies</td>
+<td>String</td>
+<td>是否开通流媒体电影（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li><strong>合同与账单信息</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>contract</td>
+<td>String</td>
+<td>合同类型（Month-to-month, One year, Two year）</td>
+</tr>
+<tr>
+<td>paperlessBilling</td>
+<td>String</td>
+<td>是否使用无纸化账单（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>paymentMethod</td>
+<td>String</td>
+<td>支付方式（Electronic check, Mailed check, Bank transfer, Credit card）</td>
+</tr>
+<tr>
+<td>monthlyCharges</td>
+<td>Double</td>
+<td>月度费用（美元）</td>
+</tr>
+<tr>
+<td>totalCharges</td>
+<td>Double</td>
+<td>总费用（美元，历史累计）</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li><strong>目标变量（预测核心）</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>churn</td>
+<td>String</td>
+<td>客户是否流失（Yes&#x2F;No）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">conf = SparkConf().setAppName(<span class="string">&quot;Q2&quot;</span>).<span class="built_in">set</span>(<span class="string">&quot;spark.jars&quot;</span>, <span class="string">&quot;/data/lab/mysql-connector-j-8.4.0.jar&quot;</span>)</span><br><span class="line">spark = SparkSession.builder.config(conf=conf).appName(<span class="string">&quot;Q2&quot;</span>).getOrCreate()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定文件路径</span></span><br><span class="line">data_path = <span class="string">&#x27;/data/lab/pro1/Telco-Customer-Churn.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义schema</span></span><br><span class="line">schema = StructType([</span><br><span class="line">  StructField(<span class="string">&#x27;customerID&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;gender&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;seniorCitizen&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;partner&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;dependents&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;tenure&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;phoneService&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;multipleLines&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;internetService&#x27;</span>, StringType()), </span><br><span class="line">  StructField(<span class="string">&#x27;onlineSecurity&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;onlineBackup&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;deviceProtection&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;techSupport&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;streamingTV&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;streamingMovies&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;contract&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;paperlessBilling&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;paymentMethod&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;monthlyCharges&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;totalCharges&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;churn&#x27;</span>, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据预处理"><a href="#3-数据预处理" class="headerlink" title="3. 数据预处理"></a>3. 数据预处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原始文件存在bronze_df表中</span></span><br><span class="line">bronze_df = spark.read.<span class="built_in">format</span>(<span class="string">&#x27;csv&#x27;</span>).schema(schema).option(<span class="string">&#x27;header&#x27;</span>,<span class="string">&#x27;true&#x27;</span>).load(data_path)</span><br><span class="line">bronze_df.show(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行数据预处理,将处理好的数据放在silver_df中</span></span><br><span class="line"><span class="comment"># 将“churn”列转换为布尔值，并过滤出有月度合同的互联网用户。</span></span><br><span class="line">silver_df = bronze_df.withColumn(<span class="string">&#x27;churn&#x27;</span>,when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>).when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>).otherwise(<span class="string">&#x27;Unknown&#x27;</span>))\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;contract&#x27;</span>) == <span class="string">&#x27;Month-to-month&#x27;</span>)\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;internetService&#x27;</span>) != <span class="string">&#x27;No&#x27;</span>)</span><br><span class="line">silver_df.show(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
