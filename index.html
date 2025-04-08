@@ -274,8 +274,7 @@
 
 <h2 id="三-卡普兰-迈耶生存曲线（Kaplan-Meier"><a href="#三-卡普兰-迈耶生存曲线（Kaplan-Meier" class="headerlink" title="三. 卡普兰-迈耶生存曲线（Kaplan-Meier)"></a>三. 卡普兰-迈耶生存曲线（Kaplan-Meier)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将Spark dataframe 转成 Pandas dataframe 便于对接第三方库lifelines</span></span><br><span class="line">telco_pd = silver_df.toPandas()</span><br><span class="line">telco_pd.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型, 参数为Tenure和Churn</span></span><br><span class="line"><span class="comment"># 可视化生存概率曲线</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>]</span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line">kmf.plot(title=<span class="string">&#x27;Kaplan-Meier Survival Curve: Population level&#x27;</span>);</span><br></pre></td></tr></table></figure>
 
-<img src="images\1.png" alt="0.5" style="zoom: 33%;" />
-
+<p><img src="/%22/images/1.png%22" alt="img"></p>
 <h3 id="1-Kaplan-Meier曲线与协变量分组的理想情况"><a href="#1-Kaplan-Meier曲线与协变量分组的理想情况" class="headerlink" title="1. Kaplan-Meier曲线与协变量分组的理想情况"></a>1. Kaplan-Meier曲线与协变量分组的理想情况</h3><p><strong>理想情况：</strong>不同组别的Kaplan-Meier曲线应表现出明显分离（如OnlineSecurity的”Yes”和”No”组），这表明该协变量对预测目标（如客户流失）有区分能力。</p>
 <p><strong>不理想情况：</strong>若曲线紧密重叠（如Gender的“Female”和“Male”组），则说明该变量可能对预测无帮助。</p>
 <hr>
@@ -730,7 +729,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tanglj78.github.io/2025/04/08/My%20first%20blog/" data-id="cm98jla6o0000jc7zfpi14qom" data-title="My first blog" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://tanglj78.github.io/2025/04/08/My%20first%20blog/" data-id="cm98k5mlv00002k7zca61fpov" data-title="My first blog" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
