@@ -433,7 +433,7 @@
 </thead>
 <tbody><tr>
 <td><strong>功能</strong></td>
-<td>估计生存概率 $S(t)$</td>
+<td>估计生存概率 S(t)</td>
 <td>估计风险比</td>
 </tr>
 <tr>
@@ -444,44 +444,59 @@
 <tr>
 <td><strong>输出</strong></td>
 <td>生存曲线</td>
-<td>风险比 $\exp(\beta)$ + p值</td>
+<td>风险比 &amp;exp(\beta)$ + p值</td>
 </tr>
 </tbody></table>
 <p>风险（Hazard） 是生存的“反面”。</p>
 <hr>
-<h3 id="2-Cox模型核心公式"><a href="#2-Cox模型核心公式" class="headerlink" title="2. Cox模型核心公式"></a>2. Cox模型核心公式</h3><p>$$<br>h(t \mid X) &#x3D; \underbrace{h_0(t)}<em>{\text{基线风险}} \cdot \underbrace{\exp(\beta_1 X_1 + \dots + \beta_p X_p)}</em>{\text{部分风险}}<br>$$<br>其中，基线风险 $h_0(t)$ 所有协变量取基准值时的风险函数；部分风险 $\exp(\beta X)$表示协变量偏离基线值时对风险的影响。</p>
+<h3 id="2-Cox模型核心公式"><a href="#2-Cox模型核心公式" class="headerlink" title="2. Cox模型核心公式"></a>2. Cox模型核心公式</h3><p>$$<br>h(t \mid X) &#x3D; \underbrace{h_0(t)}<em>{\text{基线风险}} \cdot \underbrace{\exp(\beta_1 X_1 + \dots + \beta_p X_p)}</em>{\text{部分风险}}<br>$$<br>其中，<strong>基线风险</strong> $h_0(t)$ 所有协变量取基准值时的风险函数；<strong>部分风险</strong> $\exp(\beta X)$表示协变量偏离基线值时对风险的影响。</p>
 <hr>
-<h2 id="比例风险假设"><a href="#比例风险假设" class="headerlink" title="比例风险假设"></a>比例风险假设</h2><p>不同组别之间的风险比随时间保持恒定。</p>
-<p>因为基线风险仅与时间$t$相关，描述所有协变量取基准值时风险随时间的变化模式。</p>
-<p>部分风险仅与协变量$X$相关，表示协变量对风险的乘性影响，且不随时间变化。</p>
-<hr>
-<h2 id="如何验证假设"><a href="#如何验证假设" class="headerlink" title="如何验证假设"></a>如何验证假设</h2><ul>
-<li>方法 1: 统计学检验: cph.check_assumptions(df,p_value_threshold&#x3D;0.05)，p值小于0.05代表违反了假设。</li>
-<li>方法 2: Schoenfield残差：cph.check_assumptions(…, show_plots&#x3D;True)，通过残差与时间的关系图，直观判断变量风险比是否随时间变化, 残差与时间有任何趋势代表违反假设。</li>
-<li>方法 3: Log-log Kaplan-Meier曲线：绘制不同组的 $ \log(-\log(S(t))) $ 曲线，若曲线平行则假设成立。</li>
+<h3 id="3-比例风险假设"><a href="#3-比例风险假设" class="headerlink" title="3. 比例风险假设"></a>3. 比例风险假设</h3><ul>
+<li><p>不同组别之间的风险比随时间保持恒定。</p>
+</li>
+<li><p>因为基线风险仅与时间$t$相关，描述所有协变量取基准值时风险随时间的变化模式。</p>
+</li>
+<li><p>部分风险仅与协变量$X$相关，表示协变量对风险的乘性影响，且不随时间变化。</p>
+</li>
 </ul>
 <hr>
-<h2 id="假设违反的解决方案"><a href="#假设违反的解决方案" class="headerlink" title="假设违反的解决方案"></a>假设违反的解决方案</h2><p><strong>（1）保持原模型</strong></p>
+<h3 id="4-如何验证假设"><a href="#4-如何验证假设" class="headerlink" title="4. 如何验证假设"></a>4. 如何验证假设</h3><ul>
+<li><p>方法 1: 统计学检验: p值小于0.05代表违反了假设。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cph.check_assumptions(df,p_value_threshold=<span class="number">0.05</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法 2: Schoenfield残差：通过残差与时间的关系图，直观判断变量风险比是否随时间变化, 残差与时间有任何趋势代表违反假设。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cph.check_assumptions(..., show_plots=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法 3: Log-log Kaplan-Meier曲线：绘制不同组的 $ \log(-\log(S(t))) $ 曲线，若曲线平行则假设成立。</p>
+</li>
+</ul>
+<hr>
+<h3 id="5-假设违反的解决方案"><a href="#5-假设违反的解决方案" class="headerlink" title="5. 假设违反的解决方案"></a>5. 假设违反的解决方案</h3><p><strong>（1）保持原模型</strong></p>
 <ul>
 <li>适用于预测场景而非因果推断。  </li>
 <li>在这种情况下关注模型在测试集上表现良好（如Concordance指数高）。</li>
 </ul>
 <p><strong>（2）使用分层模型（Stratified Cox Model）</strong></p>
 <ul>
-<li><strong>原理</strong>：对违反假设的变量分层，每组独立估计基线风险 $ h_0(t) $，共享其他变量系数。  </li>
-<li><strong>Python示例</strong>: cph.fit(df, strata&#x3D;[‘onlineBackup_Yes’], duration_col&#x3D;’tenure’, event_col&#x3D;’churn’)</li>
-</ul>
-<p><strong>（3）引入时变协变量（Extended Cox Model）</strong></p>
-<ul>
-<li><strong>原理</strong>：通过交互项捕捉风险比随时间的变化</li>
-<li><strong>Python示例</strong>：df[‘backup_time’] &#x3D; df[‘onlineBackup_Yes’] * df[‘tenure’]  # 创建时间交互项</li>
-<li><strong>适用场景</strong>：已知风险比随时间线性变化。</li>
+<li><p><strong>原理</strong>：对违反假设的变量分层，每组独立估计基线风险 $ h_0(t) $，共享其他变量系数。  </p>
+</li>
+<li><p><strong>Python示例</strong>: </p>
+</li>
+<li><pre><code class="python">cph.fit(df, strata=[&#39;onlineBackup_Yes&#39;], duration_col=&#39;tenure&#39;, event_col=&#39;churn&#39;)
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**（3）引入时变协变量（Extended Cox Model）**</span><br><span class="line"></span><br><span class="line">- **原理**：通过交互项捕捉风险比随时间的变化</span><br><span class="line"></span><br><span class="line">- **Python示例**：</span><br><span class="line"></span><br><span class="line">- ```python</span><br><span class="line">  df[&#x27;backup_time&#x27;] = df[&#x27;onlineBackup_Yes&#x27;] * df[&#x27;tenure&#x27;]  # 创建时间交互项</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p><strong>适用场景</strong>：已知风险比随时间线性变化。</p>
+</li>
 </ul>
 <p><strong>（4）使用样条函数或分段常数风险</strong></p>
 <ul>
-<li><strong>原理</strong>：将时间轴分段，每段内基线风险为常数或平滑曲线。  </li>
-<li><strong>优势</strong>：可以灵活拟合复杂的时间模式。  </li>
-<li><strong>Python示例</strong>：  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> PiecewiseExponentialFitter</span><br><span class="line">pwf = PiecewiseExponentialFitter(breakpoints=[<span class="number">0</span>, <span class="number">6</span>, <span class="number">12</span>]).fit(df, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>原理</strong>：将时间轴分段，每段内基线风险为常数或平滑曲线。  </p>
+</li>
+<li><p><strong>优势</strong>：可以灵活拟合复杂的时间模式。  </p>
+</li>
+<li><p><strong>Python示例</strong>：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> PiecewiseExponentialFitter</span><br><span class="line">pwf = PiecewiseExponentialFitter(breakpoints=[<span class="number">0</span>, <span class="number">6</span>, <span class="number">12</span>]).fit(df, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p><strong>（5）改用别的模型（如加速失效时间模型AFT）</strong></p>
 <ul>
@@ -492,6 +507,53 @@
 </ul>
 </li>
 </ul>
+<h3 id="6-模型评估"><a href="#6-模型评估" class="headerlink" title="6. 模型评估"></a>6. 模型评估</h3><p><strong>1. 协变量统计显著性检验</strong></p>
+<ul>
+<li><strong>判断标准</strong>：<ul>
+<li>p值 &lt; 0.05 → 统计显著</li>
+<li>p值 ≥ 0.05 → 考虑删除或调整</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>2. 系数估计的置信度</strong></p>
+<ul>
+<li><strong>评估方法</strong>：<ul>
+<li>检查exp(coef)的95%置信区间</li>
+<li>若区间包含1($e^{0}$),可认为该变量不显著</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>3.示例</strong></p>
+<ul>
+<li>internetService_DSL的exp(coef) &#x3D; 0.80，说明使用DSL的客户流失风险是基准组的 80%（风险降低20%）。</li>
+</ul>
+<hr>
+<p><strong>4.模型比较指标</strong></p>
+<table>
+<thead>
+<tr>
+<th>指标名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Concordance</strong></td>
+<td>模型预测的正确排序概率，表示区分能力，越接近1说明区分能力越强</td>
+</tr>
+<tr>
+<td><strong>Partial AIC</strong></td>
+<td>考虑拟合优度和复杂度的信息准则，值越小模型越好</td>
+</tr>
+<tr>
+<td><strong>Log-likelihood Ratio Test</strong></td>
+<td>对数似然比，检验模型是否优于空模型，p&lt;0.05或者$χ^2 &gt; χ_{0.95&#x2F;0.99}^2(自由度)$说明显著改进</td>
+</tr>
+</tbody></table>
+<h2 id="7-模型结果与分析"><a href="#7-模型结果与分析" class="headerlink" title="7. 模型结果与分析"></a>7. 模型结果与分析</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将五列分类变量进行独热编码</span></span><br><span class="line">encode_cols = [<span class="string">&#x27;dependents&#x27;</span>,<span class="string">&#x27;internetService&#x27;</span>,<span class="string">&#x27;onlineBackup&#x27;</span>,<span class="string">&#x27;techSupport&#x27;</span>,<span class="string">&#x27;paperlessBilling&#x27;</span>]</span><br><span class="line"> </span><br><span class="line">encoded_pd = pd.get_dummies(telco_pd,</span><br><span class="line">               columns=encode_cols,</span><br><span class="line">               prefix=encode_cols,</span><br><span class="line">               drop_first=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 创建一个新dataframe，仅包含拟合模型所需的变量</span></span><br><span class="line">survival_pd = encoded_pd[[<span class="string">&#x27;churn&#x27;</span>,<span class="string">&#x27;tenure&#x27;</span>,<span class="string">&#x27;dependents_Yes&#x27;</span>,<span class="string">&#x27;internetService_DSL&#x27;</span>,<span class="string">&#x27;onlineBackup_Yes&#x27;</span>,<span class="string">&#x27;techSupport_Yes&#x27;</span>]]</span><br><span class="line"><span class="comment"># churn列转换为float类型</span></span><br><span class="line">survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>] = survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>].astype(<span class="string">&#x27;float&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们将使用 95% 的置信区间进行统计检验。</span></span><br><span class="line"><span class="comment"># 打印模型拟合的结果</span></span><br><span class="line">cph = CoxPHFitter(alpha=<span class="number">0.05</span>)</span><br><span class="line">cph.fit(survival_pd, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br><span class="line">cph.print_summary()</span><br></pre></td></tr></table></figure>
+
+<p>![](C:\Users\19394\Desktop\My wbsite\hexo\source_posts\images\4.png)</p>
 
       
     </div>
