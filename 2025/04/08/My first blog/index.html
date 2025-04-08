@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://example.com/2025/04/08/My%20first%20blog/images/2.png">
 <meta property="og:image" content="http://example.com/2025/04/08/My%20first%20blog/images/3.png">
 <meta property="article:published_time" content="2025-04-08T03:32:32.000Z">
-<meta property="article:modified_time" content="2025-04-08T13:27:31.815Z">
+<meta property="article:modified_time" content="2025-04-08T13:38:38.526Z">
 <meta property="article:author" content="Linjie Tang">
 <meta property="article:tag" content="a project">
 <meta name="twitter:card" content="summary">
@@ -564,7 +564,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检验是否违反假设，方法1,2</span></span><br><span class="line">cph.check_assumptions(survival_pd,p_value_threshold=<span class="number">0.05</span>,show_plots=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检验是否违反假设，方法3</span></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>] </span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制log-log Kaplan-Meier曲线</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_km_loglog</span>(<span class="params">col</span>):</span><br><span class="line">  ax = plt.subplot(<span class="number">111</span>)</span><br><span class="line">  <span class="keyword">for</span> r <span class="keyword">in</span> telco_pd[col].unique():</span><br><span class="line">    ix = telco_pd[col] == r</span><br><span class="line">    kmf.fit(T[ix], C[ix],label=r)</span><br><span class="line">    kmf.plot_loglogs(ax=ax)</span><br></pre></td></tr></table></figure>
 
 <p><strong>由以上三个检验可知, techSupport, internetService, dependents 三个变量都违反了比例风险假设。</strong></p>
-<h2 id="五-加速失效时间模型-Accelerated-Failure-Time"><a href="#五-加速失效时间模型-Accelerated-Failure-Time" class="headerlink" title="五. 加速失效时间模型(Accelerated Failure Time)"></a>五. 加速失效时间模型(Accelerated Failure Time)</h2><h3 id="1-核心概念"><a href="#1-核心概念" class="headerlink" title="1. 核心概念"></a><strong>1. 核心概念</strong></h3><ul>
+<h2 id="五-加速失效时间模型-Accelerated-Failure-Time"><a href="#五-加速失效时间模型-Accelerated-Failure-Time" class="headerlink" title="五. 加速失效时间模型(Accelerated Failure Time)"></a>五. 加速失效时间模型(Accelerated Failure Time)</h2><h3 id="1-核心概念"><a href="#1-核心概念" class="headerlink" title="1. 核心概念"></a>1. 核心概念</h3><ul>
 <li><p><strong>AFT模型</strong>是一种参数模型，假设生存时间 ( T ) 服从特定的布（如Weibull、对数正态等）。其核心思想是：<strong>不同组别的生存时间存在”加速”或”减速”效应</strong>。</p>
 </li>
 <li><p>参数模型通常比非参数和半参数模型的“灵活性”较低，但当你对指定结果变量的分布感到满意时，它可以是一个不错的选择。</p>
@@ -577,7 +577,7 @@
 </li>
 </ul>
 <hr>
-<h3 id="2-与Cox-KM模型的对比"><a href="#2-与Cox-KM模型的对比" class="headerlink" title="2. 与Cox&#x2F;KM模型的对比"></a><strong>2. 与Cox&#x2F;KM模型的对比</strong></h3><table>
+<h3 id="2-与Cox-KM模型的对比"><a href="#2-与Cox-KM模型的对比" class="headerlink" title="2. 与Cox&#x2F;KM模型的对比"></a>2. 与Cox&#x2F;KM模型的对比</h3><table>
 <thead>
 <tr>
 <th>特性</th>
@@ -612,7 +612,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="3-数学模型"><a href="#3-数学模型" class="headerlink" title="3. 数学模型"></a><strong>3. 数学模型</strong></h3><p><strong>核心方程</strong>：<br>$$<br>S_A(T) &#x3D; S_B(t) \times \lambda<br>$$</p>
+<h3 id="3-数学模型"><a href="#3-数学模型" class="headerlink" title="3. 数学模型"></a>3. 数学模型</h3><p><strong>核心方程</strong>：<br>$$<br>S_A(T) &#x3D; S_B(t) \times \lambda<br>$$</p>
 <ul>
 <li>$S_A(T)$: A组的生存函数  </li>
 <li>$S_B(T)$: B组的生存函数  </li>
@@ -620,19 +620,19 @@
 </ul>
 <p><strong>对数Logistic分布示例</strong>：<br>生存函数：<br>$$<br>S(t) &#x3D; \frac{1}{1 + (\lambda t)^p}<br>$$</p>
 <hr>
-<h3 id="4-关键假设"><a href="#4-关键假设" class="headerlink" title="4. 关键假设"></a><strong>4. 关键假设</strong></h3><ol>
+<h3 id="4-关键假设"><a href="#4-关键假设" class="headerlink" title="4. 关键假设"></a>4. 关键假设</h3><ol>
 <li><strong>比例时间假设</strong>：加速因子λ不随时间变化  </li>
 <li><strong>分布假设</strong>：生存时间T服从指定分布（需验证）</li>
 </ol>
 <hr>
-<h3 id="5-如何验证假设"><a href="#5-如何验证假设" class="headerlink" title="5. 如何验证假设"></a><strong>5. 如何验证假设</strong></h3><p>AFT模型需要验证两个关键假设：</p>
+<h3 id="5-如何验证假设"><a href="#5-如何验证假设" class="headerlink" title="5. 如何验证假设"></a>5. 如何验证假设</h3><p>AFT模型需要验证两个关键假设：</p>
 <ol>
 <li><strong>比例几率假设</strong> → 要求log-log图曲线平行</li>
 <li><strong>分布适配性假设</strong> → 要求log-log图曲线呈直线</li>
 </ol>
 <p><strong>验证方法</strong>: 以 $ \log(t) $为X轴，$ y $ 为Y轴绘图</p>
 <p><strong>Log-Logistic分布的Y轴公式</strong> ：$y &#x3D; \log\left(\frac{1 - S(t)}{S(t)}\right)$</p>
-<h3 id="6-假设违反的解决方案"><a href="#6-假设违反的解决方案" class="headerlink" title="6. 假设违反的解决方案"></a><strong>6. 假设违反的解决方案</strong></h3><p>(1) 尝试其他分布</p>
+<h3 id="6-假设违反的解决方案"><a href="#6-假设违反的解决方案" class="headerlink" title="6. 假设违反的解决方案"></a>6. 假设违反的解决方案</h3><p>(1) 尝试其他分布</p>
 <p>(2) 使用半参数模型</p>
 <p>(3) 分层分析</p>
 <h3 id="7-模型评估"><a href="#7-模型评估" class="headerlink" title="7. 模型评估"></a>7. 模型评估</h3><p><strong>1. 协变量统计显著性检验</strong></p>
@@ -693,7 +693,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建交互界面</span></span><br><span class="line">interact(</span><br><span class="line">    calculate_payback,</span><br><span class="line">    dependents_Yes=widget_dict[<span class="string">&#x27;dependents_Yes&#x27;</span>],</span><br><span class="line">    internetService_DSL=widget_dict[<span class="string">&#x27;internetService_DSL&#x27;</span>],</span><br><span class="line">    onlineBackup_Yes=widget_dict[<span class="string">&#x27;onlineBackup_Yes&#x27;</span>],</span><br><span class="line">    techSupport_Yes=widget_dict[<span class="string">&#x27;techSupport_Yes&#x27;</span>],</span><br><span class="line">    internal_rate_of_return=widget_dict[<span class="string">&#x27;internal_rate_of_return&#x27;</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
 <h3 id="可视化生存曲线与收益曲线"><a href="#可视化生存曲线与收益曲线" class="headerlink" title="可视化生存曲线与收益曲线"></a>可视化生存曲线与收益曲线</h3><p>![](C:\Users\19394\Desktop\My wbsite\hexo\source_posts\images\6.png)</p>
-<h3 id="可视化客户生命周期价值分析表"><a href="#可视化客户生命周期价值分析表" class="headerlink" title="可视化客户生命周期价值分析表"></a><strong>可视化客户生命周期价值分析表</strong></h3><table>
+<h3 id="可视化客户生命周期价值分析表"><a href="#可视化客户生命周期价值分析表" class="headerlink" title="可视化客户生命周期价值分析表"></a>可视化客户生命周期价值分析表</h3><table>
 <thead>
 <tr>
 <th>名称<br></th>
