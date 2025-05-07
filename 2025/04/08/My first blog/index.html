@@ -1,0 +1,840 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>生存分析实战 | Linjie Tang's blog</title><meta name="author" content="Linjie Tang"><meta name="copyright" content="Linjie Tang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这是一篇利用Python进行的生存分析实践博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="生存分析实战">
+<meta property="og:url" content="https://tanglj78.github.io/2025/04/08/My%20first%20blog/index.html">
+<meta property="og:site_name" content="Linjie Tang&#39;s blog">
+<meta property="og:description" content="这是一篇利用Python进行的生存分析实践博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanglj78.github.io/img/ghost.png">
+<meta property="article:published_time" content="2025-04-08T03:32:32.000Z">
+<meta property="article:modified_time" content="2025-04-09T08:36:59.832Z">
+<meta property="article:author" content="Linjie Tang">
+<meta property="article:tag" content="生存分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanglj78.github.io/img/ghost.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "生存分析实战",
+  "url": "https://tanglj78.github.io/2025/04/08/My%20first%20blog/",
+  "image": "https://tanglj78.github.io/img/ghost.png",
+  "datePublished": "2025-04-08T03:32:32.000Z",
+  "dateModified": "2025-04-09T08:36:59.832Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Linjie Tang",
+      "url": "https://tanglj78.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://tanglj78.github.io/2025/04/08/My%20first%20blog/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '生存分析实战',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Linjie Tang's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">生存分析实战</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">生存分析实战</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-08T03:32:32.000Z" title="发表于 2025-04-08 11:32:32">2025-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-09T08:36:59.832Z" title="更新于 2025-04-09 16:36:59">2025-04-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.8k</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="生存分析实战"><a href="#生存分析实战" class="headerlink" title="生存分析实战"></a>生存分析实战</h1><h2 id="一-概述"><a href="#一-概述" class="headerlink" title="一. 概述"></a>一. 概述</h2><p><strong>生存分析</strong>是一种统计方法，主要用于研究某个<strong>事件</strong>（如死亡、故障、客户流失）发生前的<strong>时间长度</strong>及其影响因素。它的核心特点是能处理<strong>“删失数据”</strong>（censored data），即部分研究对象在观察期内未发生目标事件（如患者未死亡、设备未故障）。</p>
+<p>该博客是一篇学习笔记，以下是全文框架。</p>
+<ul>
+<li><p><strong>卡普兰-迈耶生存曲线（Kaplan-Meier）与对数秩检验（Log-Rank Test）</strong></p>
+</li>
+<li><p><strong>Cox比例风险模型（Cox Proportional Hazards）</strong></p>
+</li>
+<li><p><strong>加速失效时间模型（Accelerated Failure Time）</strong></p>
+</li>
+<li><p><strong>将生存分析模型结果可视化，方便真实模拟业务场景</strong></p>
+</li>
+</ul>
+<p>以下资源在创建此博客时被参考。</p>
+<p><a target="_blank" rel="noopener" href="https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html">https://notebooks.databricks.com/notebooks/CME/Survival_Analysis/index.html#Survival_Analysis_1.html</a></p>
+<h2 id="二-数据读取与预处理"><a href="#二-数据读取与预处理" class="headerlink" title="二. 数据读取与预处理"></a>二. 数据读取与预处理</h2><h3 id="1-导入相应的Python库"><a href="#1-导入相应的Python库" class="headerlink" title="1. 导入相应的Python库"></a>1. 导入相应的Python库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PySpark相关库</span></span><br><span class="line"><span class="keyword">from</span> pyspark <span class="keyword">import</span> SparkConf</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> col, when</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> StructType, StructField, DoubleType, StringType, IntegerType</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据处理与可视化库</span></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生存分析库</span></span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter</span><br><span class="line"><span class="keyword">from</span> lifelines.utils <span class="keyword">import</span> median_survival_times</span><br><span class="line"><span class="keyword">from</span> lifelines.statistics <span class="keyword">import</span> pairwise_logrank_test, proportional_hazard_test</span><br><span class="line"><span class="keyword">from</span> lifelines.fitters.coxph_fitter <span class="keyword">import</span> CoxPHFitter</span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter, WeibullAFTFitter,LogNormalAFTFitter,LogLogisticAFTFitter</span><br><span class="line"></span><br><span class="line"><span class="comment"># 交互式可视化库</span></span><br><span class="line"><span class="keyword">from</span> ipywidgets <span class="keyword">import</span> interact, widgets</span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> display</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据导入"><a href="#2-数据导入" class="headerlink" title="2. 数据导入"></a>2. 数据导入</h3><p><strong>数据来源：</strong><a target="_blank" rel="noopener" href="https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv">https://github.com/IBM/telco-customer-churn-on-icp4d/blob/master/data/Telco-Customer-Churn.csv</a></p>
+<p><strong>数据说明：</strong></p>
+<ol>
+<li><strong>客户信息</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customerID</td>
+<td>String</td>
+<td>客户唯一标识符</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>String</td>
+<td>性别（Male&#x2F;Female）</td>
+</tr>
+<tr>
+<td>seniorCitizen</td>
+<td>Double</td>
+<td>是否为老年人（0&#x3D;否, 1&#x3D;是）</td>
+</tr>
+<tr>
+<td>partner</td>
+<td>String</td>
+<td>是否有配偶（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>dependents</td>
+<td>String</td>
+<td>是否有经济依赖人（Yes&#x2F;No）</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><strong>服务使用情况</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tenure</td>
+<td>Double</td>
+<td>客户使用服务的月数（客户生命周期）</td>
+</tr>
+<tr>
+<td>phoneService</td>
+<td>String</td>
+<td>是否开通电话服务（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>multipleLines</td>
+<td>String</td>
+<td>是否开通多线电话（Yes&#x2F;No&#x2F;No phone service）</td>
+</tr>
+<tr>
+<td>internetService</td>
+<td>String</td>
+<td>互联网服务类型（DSL, Fiber optic, No）</td>
+</tr>
+<tr>
+<td>onlineSecurity</td>
+<td>String</td>
+<td>是否开通在线安全服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>onlineBackup</td>
+<td>String</td>
+<td>是否开通在线备份服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>deviceProtection</td>
+<td>String</td>
+<td>是否开通设备保护服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>techSupport</td>
+<td>String</td>
+<td>是否开通技术支持服务（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>streamingTV</td>
+<td>String</td>
+<td>是否开通流媒体电视（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+<tr>
+<td>streamingMovies</td>
+<td>String</td>
+<td>是否开通流媒体电影（Yes&#x2F;No&#x2F;No internet service）</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li><strong>合同与账单信息</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>contract</td>
+<td>String</td>
+<td>合同类型（Month-to-month, One year, Two year）</td>
+</tr>
+<tr>
+<td>paperlessBilling</td>
+<td>String</td>
+<td>是否使用无纸化账单（Yes&#x2F;No）</td>
+</tr>
+<tr>
+<td>paymentMethod</td>
+<td>String</td>
+<td>支付方式（Electronic check, Mailed check, Bank transfer, Credit card）</td>
+</tr>
+<tr>
+<td>monthlyCharges</td>
+<td>Double</td>
+<td>月度费用（美元）</td>
+</tr>
+<tr>
+<td>totalCharges</td>
+<td>Double</td>
+<td>总费用（美元，历史累计）</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li><strong>目标变量（预测核心）</strong></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>churn</td>
+<td>String</td>
+<td>客户是否流失（Yes&#x2F;No）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">conf = SparkConf().setAppName(<span class="string">&quot;Q2&quot;</span>).<span class="built_in">set</span>(<span class="string">&quot;spark.jars&quot;</span>, <span class="string">&quot;/data/lab/mysql-connector-j-8.4.0.jar&quot;</span>)</span><br><span class="line">spark = SparkSession.builder.config(conf=conf).appName(<span class="string">&quot;Q2&quot;</span>).getOrCreate()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定文件路径</span></span><br><span class="line">data_path = <span class="string">&#x27;/data/lab/pro1/Telco-Customer-Churn.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义schema</span></span><br><span class="line">schema = StructType([</span><br><span class="line">  StructField(<span class="string">&#x27;customerID&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;gender&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;seniorCitizen&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;partner&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;dependents&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;tenure&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;phoneService&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;multipleLines&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;internetService&#x27;</span>, StringType()), </span><br><span class="line">  StructField(<span class="string">&#x27;onlineSecurity&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;onlineBackup&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;deviceProtection&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;techSupport&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;streamingTV&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;streamingMovies&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;contract&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;paperlessBilling&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;paymentMethod&#x27;</span>, StringType()),</span><br><span class="line">  StructField(<span class="string">&#x27;monthlyCharges&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;totalCharges&#x27;</span>, DoubleType()),</span><br><span class="line">  StructField(<span class="string">&#x27;churn&#x27;</span>, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据预处理"><a href="#3-数据预处理" class="headerlink" title="3. 数据预处理"></a>3. 数据预处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原始文件存在bronze_df表中</span></span><br><span class="line">bronze_df = spark.read.<span class="built_in">format</span>(<span class="string">&#x27;csv&#x27;</span>).schema(schema).option(<span class="string">&#x27;header&#x27;</span>,<span class="string">&#x27;true&#x27;</span>).load(data_path)</span><br><span class="line">bronze_df.show(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行数据预处理,将处理好的数据放在silver_df中</span></span><br><span class="line"><span class="comment"># 将“churn”列转换为布尔值，并过滤出有月度合同的互联网用户。</span></span><br><span class="line">silver_df = bronze_df.withColumn(<span class="string">&#x27;churn&#x27;</span>,when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>).when(col(<span class="string">&#x27;churn&#x27;</span>) == <span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>).otherwise(<span class="string">&#x27;Unknown&#x27;</span>))\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;contract&#x27;</span>) == <span class="string">&#x27;Month-to-month&#x27;</span>)\</span><br><span class="line">                     .<span class="built_in">filter</span>(col(<span class="string">&#x27;internetService&#x27;</span>) != <span class="string">&#x27;No&#x27;</span>)</span><br><span class="line">silver_df.show(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三-卡普兰-迈耶生存曲线（Kaplan-Meier"><a href="#三-卡普兰-迈耶生存曲线（Kaplan-Meier" class="headerlink" title="三. 卡普兰-迈耶生存曲线（Kaplan-Meier)"></a>三. 卡普兰-迈耶生存曲线（Kaplan-Meier)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将Spark dataframe 转成 Pandas dataframe 便于对接第三方库lifelines</span></span><br><span class="line">telco_pd = silver_df.toPandas()</span><br><span class="line">telco_pd.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型, 参数为Tenure和Churn</span></span><br><span class="line"><span class="comment"># 可视化生存概率曲线</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>]</span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line">kmf.plot(title=<span class="string">&#x27;Kaplan-Meier Survival Curve: Population level&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<img src="/images/1.png" style="zoom:33%;" />
+
+<h3 id="1-Kaplan-Meier曲线与协变量分组的理想情况"><a href="#1-Kaplan-Meier曲线与协变量分组的理想情况" class="headerlink" title="1. Kaplan-Meier曲线与协变量分组的理想情况"></a>1. Kaplan-Meier曲线与协变量分组的理想情况</h3><p><strong>理想情况：</strong>不同组别的Kaplan-Meier曲线应表现出明显分离（如OnlineSecurity的”Yes”和”No”组），这表明该协变量对预测目标（如客户流失）有区分能力。</p>
+<p><strong>不理想情况：</strong>若曲线紧密重叠（如Gender的“Female”和“Male”组），则说明该变量可能对预测无帮助。</p>
+<hr>
+<h3 id="2-Log-Rank检验的作用"><a href="#2-Log-Rank检验的作用" class="headerlink" title="2. Log-Rank检验的作用"></a>2. Log-Rank检验的作用</h3><p><strong>检验不同组别的生存曲线是否具有统计学差异。</strong></p>
+<p>原假设（H₀）：组间无差异。</p>
+<p>备择假设（H₁）：组间存在差异。</p>
+<p>若 p值 &lt; 0.05，则拒绝H₀，认为组间差异显著（如OnlineSecurity）。</p>
+<p>若 p值 ≥ 0.05，则无法拒绝H₀，认为组间可能无差异（如Gender）。</p>
+<p>另外，test_statistic值越大差异越显著。</p>
+<hr>
+<h3 id="3-利用Kaplan-Meier曲线预测与推断的不同视角"><a href="#3-利用Kaplan-Meier曲线预测与推断的不同视角" class="headerlink" title="3. 利用Kaplan-Meier曲线预测与推断的不同视角"></a>3. 利用Kaplan-Meier曲线预测与推断的不同视角</h3><p><strong>预测（Prediction）：</strong>目标是找到强相关特征以构建高精度模型。对于无差异的变量（如Gender）可以直接剔除，减少噪声。</p>
+<p><strong>推断（Inference）：</strong>目的是理解业务影响，即使变量无预测价值，也可能具有一定的决策意义（如免费提供某服务后，发现对用户留存无改善，决策者需要评估是否值得继续投入）。</p>
+<hr>
+<h3 id="4-模型不适用的情况"><a href="#4-模型不适用的情况" class="headerlink" title="4. 模型不适用的情况"></a>4. 模型不适用的情况</h3><p>Log-rank 检验假设各组风险比例恒定，若曲线交叉，需使用分段Log-Rank检验或Cox模型。</p>
+<hr>
+<h3 id="5-模型结果与分析"><a href="#5-模型结果与分析" class="headerlink" title="5. 模型结果与分析"></a>5. 模型结果与分析</h3><p>以下是按性别和是否开启网络安全服务变量画出的Kaplan-Meier曲线和Log-Rank检验</p>
+<ul>
+<li><strong>OnlineSecurity</strong>就是一个很好的例子, 他的生存曲线能明显分离，进一步Log-Rank检验的p值非常小，我们能判断组间差异明显。</li>
+<li>相反，<strong>Gender</strong>的生存曲线非常接近，那就不太理想。当生存曲线非常接近时，我们需要进一步进行 Log-Rank 检验。以判断组之间在统计上是否等价。结果我们对于性别的 Log-Rank 检验的 p 值大于 0.05，因此我们无法拒绝两个组在统计上等价的原假设。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="right">variable</th>
+<th align="right">test_statistic</th>
+<th align="right">p</th>
+<th align="right">-log2(p)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">Female &#x2F; Male</td>
+<td align="right">1.61011</td>
+<td align="right">0.204476</td>
+<td align="right">2.289995</td>
+</tr>
+</tbody></table>
+<img src="/images/2.png" style="zoom:33%;" />
+
+<table>
+<thead>
+<tr>
+<th align="right">variable</th>
+<th align="right">test_statistic</th>
+<th align="right">p</th>
+<th align="right">-log2(p)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">No &#x2F; Yes</td>
+<td align="right">75.800079</td>
+<td align="right">3.138886e-18</td>
+<td align="right">58.144453</td>
+</tr>
+</tbody></table>
+<img src="/images/3.png" style="zoom:33%;" />
+
+<p><strong>以下表格记录了Kaplan-Meier法的结果</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>Kaplan-Meier曲线</th>
+<th>Log-rank检验p值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gender</td>
+<td>基本重合</td>
+<td>p &#x3D; 0.20</td>
+</tr>
+<tr>
+<td>seniorCitizen</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>partner</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>dependents</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>phoneService</td>
+<td>略微分离</td>
+<td>p &#x3D; 0.38</td>
+</tr>
+<tr>
+<td>multipleLines</td>
+<td>明显分离</td>
+<td>所有p值均小于0.05</td>
+</tr>
+<tr>
+<td>internetService</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>onlineSecurity</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>onlineBackup</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>deviceProtection</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>techSupport</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>streamingTV</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>streamingMovies</td>
+<td>略微分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>paperlessBilling</td>
+<td>明显分离</td>
+<td>p &lt; 0.05</td>
+</tr>
+<tr>
+<td>paymentMethod</td>
+<td>除Bank transfer和Credit card曲线基本重合<br>其他曲线明显分离</td>
+<td>除Bank transfer和Credit Card的p &#x3D; 0.70<br>其余p &lt; 0.05</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p><strong>其中性别对流失无影响，无需针对性营销 。</strong></p>
+</li>
+<li><p><strong>使用银行转账或信用卡支付的客户，其流失风险在统计学上无法区分。</strong></p>
+</li>
+</ul>
+<h2 id="四-Cox比例风险模型-Cox-Proportional-Hazards"><a href="#四-Cox比例风险模型-Cox-Proportional-Hazards" class="headerlink" title="四. Cox比例风险模型(Cox Proportional Hazards)"></a>四. Cox比例风险模型(Cox Proportional Hazards)</h2><h3 id="1-Cox比例风险模型-vs-Kaplan-Meier方法"><a href="#1-Cox比例风险模型-vs-Kaplan-Meier方法" class="headerlink" title="1. Cox比例风险模型 vs Kaplan-Meier方法"></a>1. Cox比例风险模型 vs Kaplan-Meier方法</h3><table>
+<thead>
+<tr>
+<th><strong>维度</strong></th>
+<th><strong>Kaplan-Meier</strong></th>
+<th><strong>Cox比例风险模型</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>功能</strong></td>
+<td>估计生存概率 $S(t)$</td>
+<td>估计风险比</td>
+</tr>
+<tr>
+<td><strong>输入</strong></td>
+<td>单变量分组</td>
+<td>多变量联合分析</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td>生存曲线</td>
+<td>风险比 $\exp(\beta)$ 和 p值</td>
+</tr>
+</tbody></table>
+<p>风险（Hazard） 是生存的“反面”。</p>
+<hr>
+<h3 id="2-Cox模型核心公式"><a href="#2-Cox模型核心公式" class="headerlink" title="2. Cox模型核心公式"></a>2. Cox模型核心公式</h3><p>$$h(t \mid X) &#x3D; h_0(t) \cdot \exp(\beta_1 X_1 + \dots + \beta_p X_p)$$</p>
+<p>其中，<strong>基线风险</strong> $h_0(t)$ 所有协变量取基准值时的风险函数；<strong>部分风险</strong> $\exp(\beta X)$表示协变量偏离基线值时对风险的影响。</p>
+<hr>
+<h3 id="3-比例风险假设"><a href="#3-比例风险假设" class="headerlink" title="3. 比例风险假设"></a>3. 比例风险假设</h3><ul>
+<li><p>不同组别之间的风险比随时间保持恒定。</p>
+</li>
+<li><p>因为基线风险仅与时间$t$相关，描述所有协变量取基准值时风险随时间的变化模式。</p>
+</li>
+<li><p>部分风险仅与协变量$X$相关，表示协变量对风险的乘性影响，且不随时间变化。</p>
+</li>
+</ul>
+<hr>
+<h3 id="4-如何验证假设"><a href="#4-如何验证假设" class="headerlink" title="4. 如何验证假设"></a>4. 如何验证假设</h3><ul>
+<li><p>方法 1: 统计学检验: p值小于0.05代表违反了假设。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cph.check_assumptions(df,p_value_threshold=<span class="number">0.05</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法 2: Schoenfield残差：通过残差与时间的关系图，直观判断变量风险比是否随时间变化, 残差与时间有任何趋势代表违反假设。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cph.check_assumptions(..., show_plots=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法 3: Log-log Kaplan-Meier曲线：绘制不同组的 $ \log(-\log(S(t))) $ 曲线，若曲线平行则假设成立。</p>
+</li>
+</ul>
+<hr>
+<h3 id="5-假设违反的解决方案"><a href="#5-假设违反的解决方案" class="headerlink" title="5. 假设违反的解决方案"></a>5. 假设违反的解决方案</h3><p><strong>（1）保持原模型</strong></p>
+<ul>
+<li>适用于预测场景而非因果推断。  </li>
+<li>在这种情况下关注模型在测试集上表现良好（如Concordance指数高）。</li>
+</ul>
+<p><strong>（2）使用分层模型（Stratified Cox Model）</strong></p>
+<ul>
+<li><p><strong>原理</strong>：对违反假设的变量分层，每组独立估计基线风险 $ h_0(t) $，共享其他变量系数。  </p>
+</li>
+<li><p><strong>Python示例</strong>: </p>
+</li>
+<li><pre><code class="python">cph.fit(df, strata=[&#39;onlineBackup_Yes&#39;], duration_col=&#39;tenure&#39;, event_col=&#39;churn&#39;)
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**（3）引入时变协变量（Extended Cox Model）**</span><br><span class="line"></span><br><span class="line">- **原理**：通过交互项捕捉风险比随时间的变化</span><br><span class="line"></span><br><span class="line">- **Python示例**：</span><br><span class="line"></span><br><span class="line">- ```python</span><br><span class="line">  df[&#x27;backup_time&#x27;] = df[&#x27;onlineBackup_Yes&#x27;] * df[&#x27;tenure&#x27;]  # 创建时间交互项</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p><strong>适用场景</strong>：已知风险比随时间线性变化。</p>
+</li>
+</ul>
+<p><strong>（4）使用样条函数或分段常数风险</strong></p>
+<ul>
+<li><p><strong>原理</strong>：将时间轴分段，每段内基线风险为常数或平滑曲线。  </p>
+</li>
+<li><p><strong>优势</strong>：可以灵活拟合复杂的时间模式。  </p>
+</li>
+<li><p><strong>Python示例</strong>：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> PiecewiseExponentialFitter</span><br><span class="line">pwf = PiecewiseExponentialFitter(breakpoints=[<span class="number">0</span>, <span class="number">6</span>, <span class="number">12</span>]).fit(df, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>（5）改用别的模型（如加速失效时间模型AFT）</strong></p>
+<ul>
+<li><strong>AFT模型</strong>：假设生存时间 ( T ) 服从特定分布（如Weibull、对数正态），直接建模生存时间而非风险函数。  </li>
+<li><strong>适用场景</strong>：  <ul>
+<li>PH假设严重违反且无法修正。  </li>
+<li>生存时间有明显参数分布特征。</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-模型评估"><a href="#6-模型评估" class="headerlink" title="6. 模型评估"></a>6. 模型评估</h3><p><strong>1. 协变量统计显著性检验</strong></p>
+<ul>
+<li><strong>判断标准</strong>：<ul>
+<li>p值 &lt; 0.05 → 统计显著</li>
+<li>p值 ≥ 0.05 → 考虑删除或调整</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>2. 系数估计的置信度</strong></p>
+<ul>
+<li><strong>评估方法</strong>：<ul>
+<li>检查exp(coef)的95%置信区间</li>
+<li>若区间包含1($e^{0}$),可认为该变量不显著</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>3.示例</strong></p>
+<ul>
+<li>internetService_DSL的exp(coef) &#x3D; 0.80，说明使用DSL的客户流失风险是基准组的 80%（风险降低20%）。</li>
+</ul>
+<hr>
+<p><strong>4.模型比较指标</strong></p>
+<table>
+<thead>
+<tr>
+<th>指标名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Concordance</strong></td>
+<td>模型预测的正确排序概率，表示区分能力，越接近1说明区分能力越强</td>
+</tr>
+<tr>
+<td><strong>Partial AIC</strong></td>
+<td>考虑拟合优度和复杂度的信息准则，值越小模型越好</td>
+</tr>
+<tr>
+<td><strong>Log-likelihood Ratio Test</strong></td>
+<td>对数似然比，检验模型是否优于空模型，$p&lt;0.05$ 或者 $χ^2 &gt; χ_{0.95&#x2F;0.99}^2(自由度)$说明显著改进</td>
+</tr>
+</tbody></table>
+<h3 id="7-模型结果与分析"><a href="#7-模型结果与分析" class="headerlink" title="7. 模型结果与分析"></a>7. 模型结果与分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将五列分类变量进行独热编码</span></span><br><span class="line">encode_cols = [<span class="string">&#x27;dependents&#x27;</span>,<span class="string">&#x27;internetService&#x27;</span>,<span class="string">&#x27;onlineBackup&#x27;</span>,<span class="string">&#x27;techSupport&#x27;</span>,<span class="string">&#x27;paperlessBilling&#x27;</span>]</span><br><span class="line"> </span><br><span class="line">encoded_pd = pd.get_dummies(telco_pd,</span><br><span class="line">               columns=encode_cols,</span><br><span class="line">               prefix=encode_cols,</span><br><span class="line">               drop_first=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 创建一个新dataframe，仅包含拟合模型所需的变量</span></span><br><span class="line">survival_pd = encoded_pd[[<span class="string">&#x27;churn&#x27;</span>,<span class="string">&#x27;tenure&#x27;</span>,<span class="string">&#x27;dependents_Yes&#x27;</span>,<span class="string">&#x27;internetService_DSL&#x27;</span>,<span class="string">&#x27;onlineBackup_Yes&#x27;</span>,<span class="string">&#x27;techSupport_Yes&#x27;</span>]]</span><br><span class="line"><span class="comment"># churn列转换为float类型</span></span><br><span class="line">survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>] = survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>].astype(<span class="string">&#x27;float&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们将使用 95% 的置信区间进行统计检验。</span></span><br><span class="line"><span class="comment"># 打印模型拟合的结果</span></span><br><span class="line">cph = CoxPHFitter(alpha=<span class="number">0.05</span>)</span><br><span class="line">cph.fit(survival_pd, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br><span class="line">cph.print_summary()</span><br></pre></td></tr></table></figure>
+
+<img src="/images/4.png" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检验是否违反假设，方法1,2</span></span><br><span class="line">cph.check_assumptions(survival_pd,p_value_threshold=<span class="number">0.05</span>,show_plots=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检验是否违反假设，方法3</span></span><br><span class="line"><span class="comment"># 拟合Kaplan-Meier模型</span></span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>] </span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制log-log Kaplan-Meier曲线</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_km_loglog</span>(<span class="params">col</span>):</span><br><span class="line">  ax = plt.subplot(<span class="number">111</span>)</span><br><span class="line">  <span class="keyword">for</span> r <span class="keyword">in</span> telco_pd[col].unique():</span><br><span class="line">    ix = telco_pd[col] == r</span><br><span class="line">    kmf.fit(T[ix], C[ix],label=r)</span><br><span class="line">    kmf.plot_loglogs(ax=ax)</span><br></pre></td></tr></table></figure>
+
+<p><strong>由以上三个检验可知, techSupport, internetService, dependents 三个变量都违反了比例风险假设。</strong></p>
+<h2 id="五-加速失效时间模型-Accelerated-Failure-Time"><a href="#五-加速失效时间模型-Accelerated-Failure-Time" class="headerlink" title="五. 加速失效时间模型(Accelerated Failure Time)"></a>五. 加速失效时间模型(Accelerated Failure Time)</h2><h3 id="1-核心概念"><a href="#1-核心概念" class="headerlink" title="1. 核心概念"></a>1. 核心概念</h3><ul>
+<li><p><strong>AFT模型</strong>是一种参数模型，假设生存时间 ( $T$ ) 服从特定的布（如Weibull、对数正态等）。其核心思想是：<strong>不同组别的生存时间存在”加速”或”减速”效应</strong>。</p>
+</li>
+<li><p>参数模型通常比非参数和半参数模型的“灵活性”较低，但当你对指定结果变量的分布感到满意时，它可以是一个不错的选择。</p>
+</li>
+<li><p>例子：  </p>
+<ul>
+<li>狗的寿命 ≈ 人类寿命 × $ \frac{1}{7} $  </li>
+<li>即狗的生存时间被”加速”了7倍（经历相同生命阶段但更快）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-与Cox-KM模型的对比"><a href="#2-与Cox-KM模型的对比" class="headerlink" title="2. 与Cox&#x2F;KM模型的对比"></a>2. 与Cox&#x2F;KM模型的对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>AFT模型</th>
+<th>Kaplan-Meier</th>
+<th>Cox模型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>模型类型</strong></td>
+<td>参数化</td>
+<td>非参数化</td>
+<td>半参数化</td>
+</tr>
+<tr>
+<td><strong>分布假设</strong></td>
+<td>需指定T的分布</td>
+<td>无分布假设</td>
+<td>无基线风险分布假设</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>最低</td>
+<td>最高</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>输出解释</strong></td>
+<td>时间加速因子</td>
+<td>生存概率</td>
+<td>风险比(HR)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="3-数学模型"><a href="#3-数学模型" class="headerlink" title="3. 数学模型"></a>3. 数学模型</h3><p><strong>核心方程</strong>：<br>$$<br>S_A(T) &#x3D; S_B(t) \times \lambda<br>$$</p>
+<ul>
+<li>$S_A(T)$: A组的生存函数  </li>
+<li>$S_B(T)$: B组的生存函数  </li>
+<li>$\lambda$: 加速失效率</li>
+</ul>
+<p><strong>对数Logistic分布示例</strong>：<br>生存函数：<br>$$<br>S(t) &#x3D; \frac{1}{1 + (\lambda t)^p}<br>$$</p>
+<hr>
+<h3 id="4-关键假设"><a href="#4-关键假设" class="headerlink" title="4. 关键假设"></a>4. 关键假设</h3><ol>
+<li><strong>比例时间假设</strong>：加速因子λ不随时间变化  </li>
+<li><strong>分布假设</strong>：生存时间T服从指定分布（需验证）</li>
+</ol>
+<hr>
+<h3 id="5-如何验证假设"><a href="#5-如何验证假设" class="headerlink" title="5. 如何验证假设"></a>5. 如何验证假设</h3><p>AFT模型需要验证两个关键假设：</p>
+<ol>
+<li><strong>比例几率假设</strong> → 要求log-log图曲线平行</li>
+<li><strong>分布适配性假设</strong> → 要求log-log图曲线呈直线</li>
+</ol>
+<p><strong>验证方法</strong>: 以 $ \log(t) $为X轴，$ y $ 为Y轴绘图</p>
+<p><strong>Log-Logistic分布的Y轴公式</strong> ：$y &#x3D; \log\left(\frac{1 - S(t)}{S(t)}\right)$</p>
+<h3 id="6-假设违反的解决方案"><a href="#6-假设违反的解决方案" class="headerlink" title="6. 假设违反的解决方案"></a>6. 假设违反的解决方案</h3><p>(1) 尝试其他分布</p>
+<p>(2) 使用半参数模型</p>
+<p>(3) 分层分析</p>
+<h3 id="7-模型评估"><a href="#7-模型评估" class="headerlink" title="7. 模型评估"></a>7. 模型评估</h3><p><strong>1. 协变量统计显著性检验</strong></p>
+<ul>
+<li><strong>判断标准</strong>：<ul>
+<li>p值 &lt; 0.05 → 统计显著</li>
+<li>p值 ≥ 0.05 → 考虑删除或调整</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>2.  系数估计的置信度</strong></p>
+<ul>
+<li><strong>评估方法</strong>：<ul>
+<li>检查exp(coef)的95%置信区间</li>
+<li>若区间包含1,可认为该变量不显著</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>3. 示例</strong></p>
+<ul>
+<li>internetService_DSL的exp(coef) &#x3D; 1.47，说明当客户使用Fiber Optic服务时，他们的流失时间加速了 1.47 倍。</li>
+</ul>
+<hr>
+<p><strong>4. 模型比较指标</strong></p>
+<table>
+<thead>
+<tr>
+<th>指标名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Concordance</strong></td>
+<td>模型预测的正确排序概率，表示区分能力，越接近1说明区分能力越强</td>
+</tr>
+<tr>
+<td><strong>AIC</strong></td>
+<td>考虑拟合优度和复杂度的信息准则，值越小模型越好</td>
+</tr>
+<tr>
+<td><strong>Log-likelihood Ratio Test</strong></td>
+<td>对数似然比，检验模型是否优于空模型，$p&lt;0.05$ 或者 $χ^2 &gt; χ_{0.95&#x2F;0.99}^2(自由度)$说明显著改进</td>
+</tr>
+</tbody></table>
+<h3 id="8-模型结果与评估"><a href="#8-模型结果与评估" class="headerlink" title="8.模型结果与评估"></a>8.模型结果与评估</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在这个例子中选取8个变量,并进行独热编码</span></span><br><span class="line">encode_cols = [<span class="string">&#x27;partner&#x27;</span>,<span class="string">&#x27;multipleLines&#x27;</span>,<span class="string">&#x27;internetService&#x27;</span>,<span class="string">&#x27;onlineSecurity&#x27;</span>, <span class="string">&#x27;onlineBackup&#x27;</span>,<span class="string">&#x27;deviceProtection&#x27;</span>,<span class="string">&#x27;techSupport&#x27;</span>,<span class="string">&#x27;paymentMethod&#x27;</span>]</span><br><span class="line"> </span><br><span class="line">encoded_pd = pd.get_dummies(telco_pd,</span><br><span class="line">               columns=encode_cols,</span><br><span class="line">               prefix=encode_cols,</span><br><span class="line">               drop_first=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">survival_pd = encoded_pd[[<span class="string">&#x27;churn&#x27;</span>,<span class="string">&#x27;tenure&#x27;</span>,<span class="string">&#x27;partner_Yes&#x27;</span>, <span class="string">&#x27;multipleLines_Yes&#x27;</span>, \</span><br><span class="line">                          <span class="string">&#x27;internetService_DSL&#x27;</span>,<span class="string">&#x27;onlineSecurity_Yes&#x27;</span>,<span class="string">&#x27;onlineBackup_Yes&#x27;</span>,<span class="string">&#x27;deviceProtection_Yes&#x27;</span>,<span class="string">&#x27;techSupport_Yes&#x27;</span>,\</span><br><span class="line">                          <span class="string">&#x27;paymentMethod_Bank transfer (automatic)&#x27;</span>,<span class="string">&#x27;paymentMethod_Credit card (automatic)&#x27;</span> ]]</span><br><span class="line"><span class="comment"># 在此notebook中假设生存时间T服从log-logistic分布,liflines还提供WeibullAFTFitter，LogNormalAFTFitter，LogLogisticAFTFitter，ExponentialAFTFitteraft.print_summary()</span></span><br><span class="line">aft = LogLogisticAFTFitter()</span><br><span class="line">aft.fit(survival_pd, duration_col=<span class="string">&#x27;tenure&#x27;</span>, event_col=<span class="string">&#x27;churn&#x27;</span>)</span><br><span class="line">aft.print_summary()</span><br></pre></td></tr></table></figure>
+
+<img src="/images/5.png"/>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拟合KaplanMeier模型便于检验假设是否成立</span></span><br><span class="line"><span class="keyword">from</span> lifelines <span class="keyword">import</span> KaplanMeierFitter</span><br><span class="line">kmf = KaplanMeierFitter()</span><br><span class="line"> </span><br><span class="line">T=telco_pd[<span class="string">&#x27;tenure&#x27;</span>] <span class="comment">#duration</span></span><br><span class="line">C=telco_pd[<span class="string">&#x27;churn&#x27;</span>].astype(<span class="built_in">float</span>) <span class="comment">#event observed</span></span><br><span class="line"> </span><br><span class="line">kmf.fit(T,C)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 以log(1-sf)/sf为y轴，log(t)为x轴画图</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_km_logOdds</span>(<span class="params">col</span>):</span><br><span class="line">  ax = plt.subplot(<span class="number">111</span>)</span><br><span class="line">  <span class="keyword">for</span> r <span class="keyword">in</span> telco_pd[col].unique():</span><br><span class="line">    ix = telco_pd[col] == r</span><br><span class="line">    kmf.fit(T[ix], C[ix],label=r)</span><br><span class="line">    sf = kmf.survival_function_</span><br><span class="line">    sf[<span class="string">&#x27;failureOdds&#x27;</span>] = (np.log(<span class="number">1</span>-sf))/sf</span><br><span class="line">    sf[<span class="string">&#x27;logTime&#x27;</span>] = np.log(sf.index)</span><br><span class="line">    plt.plot(sf[<span class="string">&#x27;logTime&#x27;</span>],sf[<span class="string">&#x27;failureOdds&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总体而言，每个图中的线条相对直。这有一些偏差，但整体上并不严重。这表明选择log-logistic 作为指定分布是一个合理的选择。</li>
+<li>总体而言，每个图中的线条并不平行。这表明加速失效时间模型不适用于指定的模型。</li>
+</ul>
+<h2 id="六-利用Cox比例风险模型进行可视化"><a href="#六-利用Cox比例风险模型进行可视化" class="headerlink" title="六. 利用Cox比例风险模型进行可视化"></a>六. 利用Cox比例风险模型进行可视化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 选出其中的五列，进行独热编码</span></span><br><span class="line"><span class="comment"># 拟合出Cox比例风险模型</span></span><br><span class="line"><span class="comment"># 此步与第五部分相同</span></span><br><span class="line">encode_cols = [<span class="string">&#x27;dependents&#x27;</span>,<span class="string">&#x27;internetService&#x27;</span>,<span class="string">&#x27;onlineBackup&#x27;</span>,<span class="string">&#x27;techSupport&#x27;</span>]</span><br><span class="line"> </span><br><span class="line">encoded_pd = pd.get_dummies(telco_pd,</span><br><span class="line">               columns=encode_cols,</span><br><span class="line">               prefix=encode_cols,</span><br><span class="line">               drop_first=<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line">survival_pd = encoded_pd[[<span class="string">&#x27;churn&#x27;</span>,<span class="string">&#x27;tenure&#x27;</span>,<span class="string">&#x27;dependents_Yes&#x27;</span>,<span class="string">&#x27;internetService_DSL&#x27;</span>,<span class="string">&#x27;onlineBackup_Yes&#x27;</span>,<span class="string">&#x27;techSupport_Yes&#x27;</span>]]</span><br><span class="line">survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>] = survival_pd.loc[:,<span class="string">&#x27;churn&#x27;</span>].astype(<span class="string">&#x27;float&#x27;</span>)</span><br><span class="line">cph = CoxPHFitter(alpha=<span class="number">0.05</span>)</span><br><span class="line">cph.fit(survival_pd, <span class="string">&#x27;tenure&#x27;</span>, <span class="string">&#x27;churn&#x27;</span>)</span><br><span class="line"><span class="comment"># 创建控件</span></span><br><span class="line">cols = [<span class="string">&#x27;dependents_Yes&#x27;</span>, <span class="string">&#x27;internetService_DSL&#x27;</span>, <span class="string">&#x27;onlineBackup_Yes&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;techSupport_Yes&#x27;</span>, <span class="string">&#x27;internal_rate_of_return&#x27;</span>]</span><br><span class="line"></span><br><span class="line">widget_dict = &#123;</span><br><span class="line">    col: widgets.Dropdown(options=[(<span class="string">&#x27;No&#x27;</span>, <span class="number">0</span>), (<span class="string">&#x27;Yes&#x27;</span>, <span class="number">1</span>)], value=<span class="number">0</span>, description=col)</span><br><span class="line">    <span class="keyword">if</span> col != <span class="string">&#x27;internal_rate_of_return&#x27;</span> </span><br><span class="line">    <span class="keyword">else</span> widgets.FloatSlider(<span class="built_in">min</span>=<span class="number">0.00</span>, <span class="built_in">max</span>=<span class="number">0.5</span>, step=<span class="number">0.01</span>, value=<span class="number">0.10</span>, description=<span class="string">&#x27;IRR&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> cols</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义计算函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calculate_payback</span>(<span class="params">dependents_Yes, internetService_DSL, onlineBackup_Yes,</span></span><br><span class="line"><span class="params">                     techSupport_Yes, internal_rate_of_return</span>):</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 构建输入DataFrame</span></span><br><span class="line">    input_data = pd.DataFrame(&#123;</span><br><span class="line">        <span class="string">&#x27;dependents_Yes&#x27;</span>: [dependents_Yes],</span><br><span class="line">        <span class="string">&#x27;internetService_DSL&#x27;</span>: [internetService_DSL],</span><br><span class="line">        <span class="string">&#x27;onlineBackup_Yes&#x27;</span>: [onlineBackup_Yes],</span><br><span class="line">        <span class="string">&#x27;techSupport_Yes&#x27;</span>: [techSupport_Yes],</span><br><span class="line">        <span class="string">&#x27;internal_rate_of_return&#x27;</span>:[internal_rate_of_return]</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment"># 计算生存概率 </span></span><br><span class="line">    survival_probs = cph.predict_survival_function(input_data)</span><br><span class="line">    survival_probs = pd.concat([</span><br><span class="line">        pd.Series([<span class="number">1.0</span>], index=[<span class="number">0</span>]),  <span class="comment"># 添加初始点</span></span><br><span class="line">        survival_probs </span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算结果DataFrame</span></span><br><span class="line">    irr_monthly = internal_rate_of_return / <span class="number">12</span></span><br><span class="line">    months = survival_probs.index</span><br><span class="line">    monthly_profit = <span class="number">30</span>  <span class="comment"># 假设每月利润为30, 需要按具体情况调整</span></span><br><span class="line">    </span><br><span class="line">    result_df = pd.DataFrame(&#123;</span><br><span class="line">        <span class="string">&#x27;Contract Month&#x27;</span>: months + <span class="number">1</span>,</span><br><span class="line">        <span class="string">&#x27;Survival Probability&#x27;</span>: survival_probs[<span class="number">0</span>].<span class="built_in">round</span>(<span class="number">2</span>),</span><br><span class="line">        <span class="string">&#x27;Monthly Profit&#x27;</span>: monthly_profit,</span><br><span class="line">        <span class="string">&#x27;Expected Profit&#x27;</span>: (survival_probs[<span class="number">0</span>] * monthly_profit).<span class="built_in">round</span>(<span class="number">2</span>),</span><br><span class="line">        <span class="string">&#x27;NPV of Profit&#x27;</span>: (survival_probs[<span class="number">0</span>] * monthly_profit / (<span class="number">1</span> + irr_monthly)**months).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    result_df[<span class="string">&#x27;Cumulative NPV&#x27;</span>] = result_df[<span class="string">&#x27;NPV of Profit&#x27;</span>].cumsum()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#可视化</span></span><br><span class="line">    fig, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">12</span>, <span class="number">5</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 生存曲线</span></span><br><span class="line">    ax1.plot(result_df[<span class="string">&#x27;Contract Month&#x27;</span>], result_df[<span class="string">&#x27;Survival Probability&#x27;</span>], </span><br><span class="line">            marker=<span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">    ax1.set_title(<span class="string">&#x27;Survival Probability Over Time&#x27;</span>)</span><br><span class="line">    ax1.set_xlabel(<span class="string">&#x27;Contract Month&#x27;</span>)</span><br><span class="line">    ax1.set_ylabel(<span class="string">&#x27;Survival Probability&#x27;</span>)</span><br><span class="line">    ax1.grid(<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 累计NPV</span></span><br><span class="line">    ax2.plot(result_df[<span class="string">&#x27;Contract Month&#x27;</span>], result_df[<span class="string">&#x27;Cumulative NPV&#x27;</span>], </span><br><span class="line">            marker=<span class="string">&#x27;s&#x27;</span>, color=<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">    ax2.set_title(<span class="string">&#x27;Cumulative NPV of Customer&#x27;</span>)</span><br><span class="line">    ax2.set_xlabel(<span class="string">&#x27;Contract Month&#x27;</span>)</span><br><span class="line">    ax2.set_ylabel(<span class="string">&#x27;Cumulative NPV ($)&#x27;</span>)</span><br><span class="line">    ax2.grid(<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.show()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 返回表格数据</span></span><br><span class="line">    display(result_df.set_index(<span class="string">&#x27;Contract Month&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建交互界面</span></span><br><span class="line">interact(</span><br><span class="line">    calculate_payback,</span><br><span class="line">    dependents_Yes=widget_dict[<span class="string">&#x27;dependents_Yes&#x27;</span>],</span><br><span class="line">    internetService_DSL=widget_dict[<span class="string">&#x27;internetService_DSL&#x27;</span>],</span><br><span class="line">    onlineBackup_Yes=widget_dict[<span class="string">&#x27;onlineBackup_Yes&#x27;</span>],</span><br><span class="line">    techSupport_Yes=widget_dict[<span class="string">&#x27;techSupport_Yes&#x27;</span>],</span><br><span class="line">    internal_rate_of_return=widget_dict[<span class="string">&#x27;internal_rate_of_return&#x27;</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="可视化生存曲线与收益曲线"><a href="#可视化生存曲线与收益曲线" class="headerlink" title="可视化生存曲线与收益曲线"></a>可视化生存曲线与收益曲线</h3><img src="/images/6.png"  />
+
+<h3 id="可视化客户生命周期价值分析表"><a href="#可视化客户生命周期价值分析表" class="headerlink" title="可视化客户生命周期价值分析表"></a>可视化客户生命周期价值分析表</h3><table>
+<thead>
+<tr>
+<th>名称<br></th>
+<th>说明</th>
+<th>计算公式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>合同月份</strong><br>(Contract Month)</td>
+<td>客户签约后的月份序号</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>生存概率</strong><br>(Survival Probability)</td>
+<td>客户在当月的留存概率，来自Cox比例风险模型预测</td>
+<td>predict_survival_function()</td>
+</tr>
+<tr>
+<td><strong>月利润</strong><br>(Monthly Profit)</td>
+<td>该服务方案的月利润<br>（当前设定为30，实际需替换为业务数据）</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>月均预期利润</strong><br>(Avg Expected Profit)</td>
+<td>考虑留存率后的实际月利润期望值</td>
+<td>生存概率 × 月利润</td>
+</tr>
+<tr>
+<td><strong>利润净现值</strong><br>(NPV of Profit)</td>
+<td>基于时间价值的利润折现<br>（默认内部收益率10%，需按业务调整）</td>
+<td>月均预期利润 &#x2F; (1 + 月化内部收益率)^合同月份</td>
+</tr>
+<tr>
+<td><strong>累计净现值</strong><br>(Cumulative NPV)</td>
+<td>客户累计产生的总价值</td>
+<td>各月利润净现值的累加和</td>
+</tr>
+</tbody></table>
+<img src="/images/7.png"  />
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://tanglj78.github.io">Linjie Tang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://tanglj78.github.io/2025/04/08/My%20first%20blog/">https://tanglj78.github.io/2025/04/08/My%20first%20blog/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://tanglj78.github.io" target="_blank">Linjie Tang's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90/">生存分析</a></div><div class="post-share"><div class="social-share" data-image="/img/ghost.png" data-sites="twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/05/07/Spark-MLlib/" title="Spark MLlib"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Spark MLlib</div></div><div class="info-2"><div class="info-item-1">这是一篇利用Python进行的Spark MLlib的实践</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/ghost.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Linjie Tang</div><div class="author-info-description">一个普通的大四学生</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tanglj78"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/tanglj78" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:linjietang256@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98"><span class="toc-number">1.</span> <span class="toc-text">生存分析实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">二. 数据读取与预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AF%BC%E5%85%A5%E7%9B%B8%E5%BA%94%E7%9A%84Python%E5%BA%93"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 导入相应的Python库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 数据导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 数据预处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%8D%A1%E6%99%AE%E5%85%B0-%E8%BF%88%E8%80%B6%E7%94%9F%E5%AD%98%E6%9B%B2%E7%BA%BF%EF%BC%88Kaplan-Meier"><span class="toc-number">1.3.</span> <span class="toc-text">三. 卡普兰-迈耶生存曲线（Kaplan-Meier)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Kaplan-Meier%E6%9B%B2%E7%BA%BF%E4%B8%8E%E5%8D%8F%E5%8F%98%E9%87%8F%E5%88%86%E7%BB%84%E7%9A%84%E7%90%86%E6%83%B3%E6%83%85%E5%86%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. Kaplan-Meier曲线与协变量分组的理想情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Log-Rank%E6%A3%80%E9%AA%8C%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. Log-Rank检验的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%A9%E7%94%A8Kaplan-Meier%E6%9B%B2%E7%BA%BF%E9%A2%84%E6%B5%8B%E4%B8%8E%E6%8E%A8%E6%96%AD%E7%9A%84%E4%B8%8D%E5%90%8C%E8%A7%86%E8%A7%92"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. 利用Kaplan-Meier曲线预测与推断的不同视角</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%A8%A1%E5%9E%8B%E4%B8%8D%E9%80%82%E7%94%A8%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">1.3.4.</span> <span class="toc-text">4. 模型不适用的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%9C%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">1.3.5.</span> <span class="toc-text">5. 模型结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-Cox%E6%AF%94%E4%BE%8B%E9%A3%8E%E9%99%A9%E6%A8%A1%E5%9E%8B-Cox-Proportional-Hazards"><span class="toc-number">1.4.</span> <span class="toc-text">四. Cox比例风险模型(Cox Proportional Hazards)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Cox%E6%AF%94%E4%BE%8B%E9%A3%8E%E9%99%A9%E6%A8%A1%E5%9E%8B-vs-Kaplan-Meier%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. Cox比例风险模型 vs Kaplan-Meier方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Cox%E6%A8%A1%E5%9E%8B%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. Cox模型核心公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%AF%94%E4%BE%8B%E9%A3%8E%E9%99%A9%E5%81%87%E8%AE%BE"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 比例风险假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%A6%82%E4%BD%95%E9%AA%8C%E8%AF%81%E5%81%87%E8%AE%BE"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. 如何验证假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%81%87%E8%AE%BE%E8%BF%9D%E5%8F%8D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.4.5.</span> <span class="toc-text">5. 假设违反的解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="toc-number">1.4.6.</span> <span class="toc-text">6. 模型评估</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%9C%E4%B8%8E%E5%88%86%E6%9E%90"><span class="toc-number">1.4.7.</span> <span class="toc-text">7. 模型结果与分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E5%8A%A0%E9%80%9F%E5%A4%B1%E6%95%88%E6%97%B6%E9%97%B4%E6%A8%A1%E5%9E%8B-Accelerated-Failure-Time"><span class="toc-number">1.5.</span> <span class="toc-text">五. 加速失效时间模型(Accelerated Failure Time)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 核心概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%8ECox-KM%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 与Cox&#x2F;KM模型的对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.5.3.</span> <span class="toc-text">3. 数学模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E5%81%87%E8%AE%BE"><span class="toc-number">1.5.4.</span> <span class="toc-text">4. 关键假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A6%82%E4%BD%95%E9%AA%8C%E8%AF%81%E5%81%87%E8%AE%BE"><span class="toc-number">1.5.5.</span> <span class="toc-text">5. 如何验证假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%81%87%E8%AE%BE%E8%BF%9D%E5%8F%8D%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.5.6.</span> <span class="toc-text">6. 假设违反的解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="toc-number">1.5.7.</span> <span class="toc-text">7. 模型评估</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%9C%E4%B8%8E%E8%AF%84%E4%BC%B0"><span class="toc-number">1.5.8.</span> <span class="toc-text">8.模型结果与评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD-%E5%88%A9%E7%94%A8Cox%E6%AF%94%E4%BE%8B%E9%A3%8E%E9%99%A9%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">1.6.</span> <span class="toc-text">六. 利用Cox比例风险模型进行可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E7%94%9F%E5%AD%98%E6%9B%B2%E7%BA%BF%E4%B8%8E%E6%94%B6%E7%9B%8A%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.6.1.</span> <span class="toc-text">可视化生存曲线与收益曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%AE%A2%E6%88%B7%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%BB%B7%E5%80%BC%E5%88%86%E6%9E%90%E8%A1%A8"><span class="toc-number">1.6.2.</span> <span class="toc-text">可视化客户生命周期价值分析表</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/07/Spark-MLlib/" title="Spark MLlib">Spark MLlib</a><time datetime="2025-05-07T10:51:46.000Z" title="发表于 2025-05-07 18:51:46">2025-05-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/08/My%20first%20blog/" title="生存分析实战">生存分析实战</a><time datetime="2025-04-08T03:32:32.000Z" title="发表于 2025-04-08 11:32:32">2025-04-08</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2025 By Linjie Tang</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.0-b1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
